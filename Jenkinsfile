@@ -51,8 +51,8 @@ pipeline {
                 echo "Version is ${packageVersion}"
             }
         }
-        pipeline utility steps plugin used to install
-        nexus artifact uplaoder plugin need to install
+       //pipeline utility steps plugin used to install
+       // nexus artifact uplaoder plugin need to install
         stage('Publish Artifact') {
             steps {
                 nexusArtifactUploader(
