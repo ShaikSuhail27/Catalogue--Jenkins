@@ -1,12 +1,18 @@
 pipeline {
     agent { node { label 'Agent-1' } }
+    //since variable declared here in environemnt there is no need of def
+
+    environment{
+        packageVersion = ''
+        
+    }
     stages {
         stage('package version') {
             steps {
                 script {
                     def packageJson = readJSON(file: 'package.json')
-                    def packageVersion = packageJson.version
-                    echo "version:${packageVersion}"
+                    packageVersion = packageJson.version
+                    echo "version: ${packageVersion}"
                 }
             }
         }
@@ -42,6 +48,7 @@ pipeline {
          stage('SAST') {
             steps {
                 echo "SAST is done here"
+                echo "Version is ${packageVersion}"
             }
         }
         // stage('Publish Artifact') {
@@ -51,7 +58,7 @@ pipeline {
         //             protocol: 'http',
         //             nexusUrl: '52.71.253.240:8081/',
         //             groupId: 'com.roboshop',
-        //             version: '1.0.1',
+        //             version: '${packageVersion}',
         //             repository: 'catalogue',
         //             credentialsId: 'nexus-auth',
         //             artifacts: [
