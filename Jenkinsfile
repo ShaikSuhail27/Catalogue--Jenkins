@@ -51,25 +51,27 @@ pipeline {
                 echo "Version is ${packageVersion}"
             }
         }
-        // stage('Publish Artifact') {
-        //     steps {
-        //         nexusArtifactUploader(
-        //             nexusVersion: 'nexus3',
-        //             protocol: 'http',
-        //             nexusUrl: '52.71.253.240:8081/',
-        //             groupId: 'com.roboshop',
-        //             version: '${packageVersion}',
-        //             repository: 'catalogue',
-        //             credentialsId: 'nexus-auth',
-        //             artifacts: [
-        //                 [artifactId: 'catalogue',
-        //                 classifier: '',
-        //                 file: 'catalogue.zip',
-        //                 type: 'zip']
-        //             ]
-        //         )
-        //     }
-        // }
+        pipeline utility steps plugin used to install
+        nexus artifact uplaoder plugin need to install
+        stage('Publish Artifact') {
+            steps {
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: '172.31.95.215:8081/',
+                    groupId: 'com.roboshop',
+                    version: '${packageVersion}',
+                    repository: 'catalogue',
+                    credentialsId: 'nexus-auth',
+                    artifacts: [
+                        [artifactId: 'catalogue',
+                        classifier: '',
+                        file: 'catalogue.zip',
+                        type: 'zip']
+                    ]
+                )
+            }
+        }
 
         
         stage('Deploy') {
