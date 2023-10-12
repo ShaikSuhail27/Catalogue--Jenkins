@@ -3,7 +3,10 @@ pipeline {
     stages {
         stage('Install depdencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                pwd
+                ls -la
+                '''
             }
         }
         stage('Unit test') {
