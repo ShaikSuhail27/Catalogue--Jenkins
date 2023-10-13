@@ -77,10 +77,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    echo "Deployment"
                 def params =[
                     string(name:'version',value:"$packageVersion")
                 ]
-                echo "Deployment"
+                
                  build job: "../catalogue-deploy/", wait: true,parameters: params
                 }
             }
