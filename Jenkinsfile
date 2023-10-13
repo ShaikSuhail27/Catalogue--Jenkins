@@ -73,10 +73,11 @@ pipeline {
             }
         }
 
-        
+       // to call the downstream job(deployment) we need to call it here  and we need to pass package version for deployment
         stage('Deploy') {
             steps {
                 echo "Deployment"
+                 build job: "../catalogue-deploy/", wait: true
             }
         }
     }
