@@ -76,8 +76,13 @@ pipeline {
        // to call the downstream job(deployment) we need to call it here  and we need to pass package version for deployment
         stage('Deploy') {
             steps {
+                script {
+                def params =[
+                    string(name:'version',value:"${packageVersion}")
+                ]
                 echo "Deployment"
-                 build job: "../catalogue-deploy/", wait: true
+                 build job: "../catalogue-deploy/", wait: true,parameters: params
+                }
             }
         }
     }
