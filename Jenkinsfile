@@ -1,81 +1,18 @@
-pipeline {
-    agent { node { label 'Agent-1' } }
-    stages {
-        stage('package version') {
-            steps {
-                script {
-                    def packageJson = readJSON(file: 'package.json')
-                    def packageVersion = packageJson.version
-                    echo "version:${packageVersion}"
-                }
-            }
-        }
-        stage('Install depdencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
-        stage('Unit test') {
-            steps {
-                echo "unit testing is done here"
-            }
-        }
-        //sonar-scanner command expect sonar-project.properties should be available
-        // stage('Sonar Scan') {
-        //     steps {
-        //         sh 'ls -ltr'
-        //         sh 'sonar-scanner'
-        //     }
-        // }
-         stage('Sonar Scan') {
-            steps {
-                echo "Sonar Scan is done here"
-            }
-        }
-        stage('Build') {
-            steps {
-                sh 'ls -ltr'
-                sh 'zip -r catalogue.zip ./* --exclude=.git --exclude=.zip'
-            }
-        }
+#!groovy
+// it means the libraries will be downloaded and accessible at run time
+@Library('roboshop-shared-libraries') _
 
-         stage('SAST') {
-            steps {
-                echo "SAST is done here"
-            }
-        }
-        // stage('Publish Artifact') {
-        //     steps {
-        //         nexusArtifactUploader(
-        //             nexusVersion: 'nexus3',
-        //             protocol: 'http',
-        //             nexusUrl: '52.71.253.240:8081/',
-        //             groupId: 'com.roboshop',
-        //             version: '1.0.1',
-        //             repository: 'catalogue',
-        //             credentialsId: 'nexus-auth',
-        //             artifacts: [
-        //                 [artifactId: 'catalogue',
-        //                 classifier: '',
-        //                 file: 'catalogue.zip',
-        //                 type: 'zip']
-        //             ]
-        //         )
-        //     }
-        // }
+def configMap = [
+    application: "nodeJSEKS",
+    component: "catalogue"
+]
+env
 
-        
-        stage('Deploy') {
-            steps {
-                echo "Deployment"
-            }
-        }
-    }
-
-    post{
-        always{
-            echo 'cleaning up workspace'
-            deleteDir()
-        }
-    }
+// this is .groovy file name and function inside it
+//if not master then trigger pipeline
+if ( ! env.BRANCH_NAME.equalsIgnoreCase('master')){
+    pipelineDecission.decidePipleine(configMap)
+}
+else{
+    echo "master PROD deployment should happen through CR"
 }
